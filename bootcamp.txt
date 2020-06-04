@@ -1,0 +1,375 @@
+1. BIOS
+Device boot order
+UEFI vs Legacy
+Jeger - 15577800
+
+Bootable options: e to edit in GRUB
+linux line & initrd || initramfs
+Posle root filesys attachment, init program executed, w/ PID of 1
+ps aux | head
+
+sysvinit - first commercial unix os
+systemd - API and concurrent parallel processing during boot time
+upstart - developed by Ubuntu
+
+dmesg (-T => gives the date) - read all kernel msgs since boot time
+
+sudo loadkeys <jezik>
+
+udev
+Device manager
+Low lvl access to linux device tree
+Handles user space events like loading firmware
+Mounted to /dev on startup
+
+dbus
+Inter process communication mechanism
+Framework that allows processes to talk to each other
+Secure and reliable
+Provides high lvl object oriented programming interface
+Can create rules
+
+sysfs
+Virtual filesystem
+Presents information about various kernel subsystems: hardware devices and drivers eg
+It's mounted to /sys
+
+procfs
+Similar to sysfs
+Presents information about processes
+Presents information about system information
+Mounted to /proc
+Can be used to interface with the kernel
+Parameters can be changed on the fly
+
+lsmod - see all modules in use
+rmmod - remove a module on the fly
+modprobe - add a module on the fly
+lspci - lists all pci devices
+
+-- __ ** Run levels, boot targets and how to shutdown and reboot a system ** __ --
+
+run lvs:
+0 - halt or shutdown the system
+1 - single user mode - root password changing or recovery mode
+2 - multi-user mode without networking
+3 - normal boot
+4 - unused/customizable
+5 - run lv 3 + GUI display manager
+6 - reboot
+
+script execution
+
+sysvinit way: /etc/inittab
+systemd way: /etc/systemd/system; /usr/lib/systemd/system
+
+systemd targets:
+
+|   run lv  |  systemd target   |
+| --------- | ----------------- |
+|    -0-    | poweroff.target   |
+|    -1-    | rescue.target     |
+|  -2- -4-  | multi-user.target |
+|    -3-    | multi-user.target |
+|    -5-    | graphical.target  |
+|    -6-    | reboot.target     |
+| emergency | emergency.target  |
+
+init || telinit - change runlevel
+
+init 0 - shutdown
+init 6 - reboot
+wall - write message to all users
+systemctl - all of the units that systemd is running
+sudo systemctl status <what>.target - shows status of <what>
+sudo systemctl stop <what>.target - kills <what> processes
+sudo systemctl start <what>.target - starts <what> processes
+
+-- __ ** Design hard disk layout ** __ --
+
+Hard disk stuff
+
+1. /usr - user binaries
+2. /home - place to store own files
+3. /boot - stuff for boot
+4. /var - variable data
+5. /tmp - temporary directory
+
+Partitions
+
+Dividing storage into separate pieces
+- Allows dual booting
+- Separation of files
+- Data organization
+- System protection
+
+Swap partition - if RAM is full, this is used in its stead; cannot be accessed by a user
+
+LVM - Logical volume manager
+* Can split disks into pools (physical extents, PEs or pools)
+* Create partitions from pools
+* Can grow or shrink partitions depending on the circumstance when the need arises
+
+GRUB commands
+grub-probe --version - Gives grub version
+/boot contains /grub
+menu.lst, grub.conf or grub.cfg is the grub file (*NEVER EDIT*)
+/etc/grub.d - scripts used to generate the grub files
+/etc/grub/defaults - contains grub's defaults (CAN EDIT)
+which - tells you where the command is running from
+update-grub - updates grub config
+grub-install - installs grub on another partition (e.g /dev)
+
+Libraries
+// write file to a disk
+// display something on screen
+// send files over networks
+
+Linking
+# static linking - library in the application
+# dynamic linking - the same library can be shared between links
+
+/etc/ls.so.conf/*.conf - shared libraries
+ldconfig - configure dynamic linker run-time bindings
+
+Environment variables example
+export LD_LIBRARY_PATH=/home/<username>
+echo $LD_LIBRARY_PATH - prints what it is
+
+ldd - shows what libraries the argument is linked to
+
+dpkg - Debian package manager
+apt - advanced packaging tool
+
+dpkg -l | less - lists installed packages
+dpkg -i <packagename> - installs package
+
+/etc/apt/sources.list - txtfile with urls which apt checks for installations
+apt dist-upgrade - deletes unneeded and updates needed
+
+RPM and YUM packages
+
+rpm - RedHat package manager like dpgk
+yum - yellowdog updater modified, like apt
+
+sudo yum update - updates centos
+yumdownloader - used before yum
+
+1. rpm -qf /folder/item - query format; tells what package it belongs to
+2. rename the file sudo mv...
+3. rpm --verify <daddy_package_name>
+4. rename it back
+5. sudo rpm -Va
+6. / in man file allows searching
+
+zypper and dnf
+
+zypper - used in opensuse
+
+zypper repos - lists available repositories and those enabled
+sudo zypper refresh - checks if all packages are up to date
+sudo zypper in git - installs git
+sudo zypper remove --clean-deps git - removes git and dependencies
+
+dnf - can be installed to centos
+
+dnf info get - looks at the details of the git package (might update stuff first)
+sudo dnf list - compiles a long list of available packages
+dnf list installed - lists installed
+dnf check-update - checks which packages to update
+sudo dnf install git - install the git package
+sudo dnf remove git - removes the git package
+
+Linux as a virtualization guest
+
+Advantages:
+* Multiple OS on the same computer
+* Extra hardware not necessary
+* Entire machines can be cloned, backed up and easily restored
+* Easy to manage and maintain
+* Protect the host machine
+
+Disadvantages:
+* Less efficient due to accessing hardware indirectly
+* Performance may be hindered by the host
+
+Containers - Docker Kubernetes
+Computer > container > application instead of Computer > hypervisor > different VMs with apps
+
+Cloud computing - AWS, Microsoft Azure, Google Cloud
+The cloud > networking > storage service instead of managing own servers
+
+cloud-init + docker image
+* Cloud instance initialization
+* A set of scripts that are executed when an instance is started
+* Applies user data to your instances automatically
+* Works with many popular operating systems
+* Works on almost all public clouds
+	- AWS
+	- Microsoft Azure
+	- Google Cloud Platform
+	- Rackspace, IBM, Alibaba, CloudStack, Bigstep, Hetzner, Joyent
+
+-- __ ** THE COMMAND LINE ** __ --
+bash is the most often/widely used
+the other ones are zsh ksh sh
+env - gets environment variables (temporary)
+history - shows the whole history of the current terminal window
+
+manuals - there are 9 different types
+
+man <type> <page>
+man time => TIME(1)
+man 3 time => TIME(3)
+manpath - where the man pages are stored
+uname - system information
+
+Quoting, type and which
+
+Quoting stuff we don't want to do anything special
+echo ls ; data => does not work
+quoted: echo 'ls ; date' => works
+echo ls \; date => escaping the character also works
+
+type: tells you what type the command is
+
+type type => type is a shell builtin
+type ls => ls is aliased to `ls --color=auto`
+type time => time is a shell keyword
+type less => less is /usr/bin/less
+
+which: like type, but tells you where the command is located
+
+Process text streams
+cat - used to concatenate or print to screen
+cut - remove sections from each line of files
+(cut -c<num> <filename> - return the <num>th item from every line of file)
+(cut -c<num1>-<num2> <filename> - return the items between <num1> and <num2> from every line of file)
+
+expand - turn tab into 8 spaces
+unexpand - turn every group of 8 spaces into a tab
+wc - newline count, word count and byte count
+wc -l => just the line count
+fmt - splits the file into multiple readable lines
+
+head - gives the top (default 10) lines of the text file (-n changes num of lines)
+tail - gives the bottom (default 10) lines of the text file (-n changes num of lines)
+join - joins 2 texts by correlating lines
+less - page by page
+nl - adds line numbers to the files
+od - dumps file in octal form
+paste - same as join but combines any line regardless of matching fields, separated by a tab
+pr - formats the file with date, filename and page number at the top
+sed - complex operations with text (-e flag allows regular expressions) s (substitution command of sed)
+sed in action: echo day | sed -e s/day/night/
+sort - sorts by alphabetical order
+split - splits the file into multiple files (~ 1000 lines each)
+tr - translates or deletes characters in a text (-d flags deletes)
+uniq - puts repeating lines adjacent of each other
+
+cat and sums
+
+* cats *
+bzcat - decompress compressed files with bzip2 alg
+bunzip2 - returns the previous file (decompressed)
+zcat - bzcat for gzip
+gunzip - bunzip2 for gzip
+xzcat - bzcat for xz
+unxz - bunzip2 for xz
+
+* sums *
+md5sum
+sha256sum
+sha512sum
+
+file - gives information about the file
+tar - creates a tar archive
+cvf - create verbose filename (most common options for tar)
+zx - zipped extract
+dd - used for duplication (good for iso replacement - Ubuntu.dd e.g)
+[DD often used as: dd if=<input> of=<output> {some options}]
+xxd - hex dump
+
+Streams, pipes and redirects
+
+1. STDIN - 0
+2. STDOUT - 1
+3. STDERR - 2
+
+> - redirects all the text before it to a file, [overwrite]
+>> - appends to a file redirected to [append]
+< - redirects input
+& - copy to another file descriptor
+xargs - .forEach(x => ...)
+tee - copy input to each file
+
+Processes
+
+ping - pings a computer and gives back time
+Ctrl + z || bg - background
+fg - foreground
+nohup - does not show the output of an executed command
+
+ping google.com & - & in the end backgrounds the operation, but the output can still be seen 
+
+kill(all) - kills a process
+
+Kill signals
+
+SIGINT - interruption signal - Ctrl + C
+SIGKILL - kill signal
+SIGSTOP - pause signal - Ctrl + Z
+SIGTERM - termination signal
+top - proto task manager
+free - shows info about memory
+watch (-n <num>) - run commands periodically (every <num> seconds)
+tmux - terminal multiplexer (similar to screen)
+tmux Ctrl + B - sends a command to terminal
+tmux shift + 5 - splits the screen vertically (like atom files when dragged)
+Ctrl + b && Ctrl + c - makes a new terminal window
+Ctrl + 0 - returns to the first terminal [with index 0]
+
+Modify process execution priorities
+
+Nice value determines how much CPU time a process will get (-20 - highest priority, 19 - lowest priority)
+
+usage: nice <val> <command>
+
+renice: changes nice value; usage: sudo renice <newval> -p <PID>
+
+Regex & symbols
+
+regex
+Sequence of symbols and chars
+Express a string or pattern
+Searched for within text
+
+Symbol
+
+| - or => gray|grey
+() - grouping => gr(a|e)y
+$ - EOL => end of line
+^ - SOL => start of line
+. - any character
+
+Quantifiers
+
+? - 1 or 0 occurrence(s) of the preceding element => colou?r
+* - 0 or more occurrences => ab*c === ac, abc, abbc, abbbc, ...
++ - 1 or more occurrences of the preceding element => ab+c === abc, abbc, abbbc, ...
+{n} - the preceeding item is matched exactly n times
+{min,} - at least min times a match
+{min, max} - between min and max
+
+grep - globally search for a regular expression and print
+There are grep, egrep, fgrep
+egrep = grep -E
+
+Sed can be used with regex
+
+Vi
+
+1. Editing mode
+2. Command mode
+3. Visual mode
+
