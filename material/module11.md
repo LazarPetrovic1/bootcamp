@@ -75,3 +75,62 @@ Packet types;
 `/etc/services`
 
 Ports up to 1024 are **privileged** (root only)
+
+### Basic network configuration
+
+`ifconfig` - *interface configuration* (shows all of the active interfaces) (`-a` flag to see all available)
+`ifdown` - *takes an interface down*
+`ifup` - *brings the interface up*
+
+`/etc/network/interfaces`
+
+`sudo ifconfig <interface> <new ip addr>` - *changes the IP address of the interface*
+
+`ip a` - *list all the interfaces as well*
+
+`route`
+
+`sudo route add default gw [gateway] <gateway>` - *add a default gateway*
+
+`/etc/host` - used for talking to other computers before `DNS` existed
+`/etc/host` is a table of: `<ip> <domain> <alias>`
+
+`/etc/nsswitch.conf` - how to look up certain name server information and in what order
+
+Files > (host to IP *done* or **not found**) > mdns4 (resolve IP *done* or **not found**) > res w/ NOTFOUND
+DNS for external addresses
+
+### More network configuration
+
+`nmcli` - network manager cli
+`nmcli general permissions` - lists all of the permissions
+`nmcli general logging` - print logs
+`hostnamectl` - admin separate classes of hostnames on the system
+`hostnamectl set-hostname <hostname>` - changes the hostname on next shell login
+
+
+### Basic network troubleshooting
+
+`ifdown` and `ifup` in conjunction will also reset the IP address of the interface
+`host <address>` - gets IP from DNS or the other way around
+`hostname` - get hostname
+`dig <address>` - similar to host, DNS lookup utility used to query name servers
+`netstat` - network connections, routing tables & network interface statistics
+`ping` - sends an ICMP packet to the remote server and waits to receive one & measures time it took
+`ping6` - ping for IPv6
+`traceroute <link>` - tracks the path the machine to a given point (<link>)
+`traceroute6 <link>` - traceroute for IPv6
+`netcat` - read and write traffic over a network (`netcat -l 12345`)
+
+### ss
+
+**A utility to investigate sockets and their statistics**
+
+`-l` - flag for listening sockets
+`-i` - flag for internal tcp information
+`-p` - processes using sockets
+
+### Configure client-side DNS
+ 
+`/etc/dhcp/dhclient.conf` - tcp configuration
+`getent hosts` - query hosts
