@@ -35,18 +35,29 @@ at> <Ctrl + D>
 ### Unit use
 
 `systemctl list-timers`
+
 `/lib/systemd/system/apt-daily.timer`
+
 `systemd-run --on-active=60 /bin/touch /tmp/file.txt`
 
 ### Localization and internationalization
 
 `date` - date
+
 `timezone` - timezone
+
 `/etc/localtime` - symlink to /usr/share/zoneinfo/<country>/<city>
+
 `tzselect` - select a timezone
+
 `timedatectl` - query + change system clock
+
 `locale` - formatted times and countries
+
 `iconv` - convert between different character encodings (shows supported)
+
 `file` - gives back the encoding
+
+___
 
 `/etc/group` - group passwords stored

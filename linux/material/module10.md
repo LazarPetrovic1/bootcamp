@@ -18,23 +18,28 @@ pool.ntp.org
 
 ### chrony and timedatectl
 
-__________________________________________________________________
-chrony - versatile implementation of Network Time Protocol (ntp)  |
-can use reference clocks like a GPS receiver                      |
-manual input using a wristwatch and keyboard                      |
-designed to perform well in a wide range of conditions            |
-* intermittent network connections                                |
-* changing temperatures                                           |
-* virtual machines                                                |
-__________________________________________________________________|
+chrony - versatile implementation of Network Time Protocol (ntp)  
+can use reference clocks like a GPS receiver                      
+manual input using a wristwatch and keyboard                      
+designed to perform well in a wide range of conditions            
+* intermittent network connections                                
+* changing temperatures                                           
+* virtual machines                                                
 
 `chronyc` - CLI program
+
 `chronyc tracking` (see time info)
+
 `chronyc sources` (get the sources list)
+
 `timedatectl` - gives local, universat, rtc time, timezone and more
+
 `sudo timedatectl set-time "YYYY-MM-DD HH:MM:SS"` // not allowed when time synchronization is enabled
+
 `timedatectl list-timezones` - lists the timezones
+
 `timedatectl set-timezone <timezone name>`
+
 `timedatectl set-ntp false/true` - use the `ntp` or not
 
 ### System logging
@@ -58,8 +63,11 @@ __________________________________________________________________|
 + Debugging messages
 
 `rsyslogd` is used
+
 lives in `/etc/rsyslog.d`
+
 logs found `/var/log/syslog`
+
 `/etc/logrotate.conf` - additional information and settings about logs
 
 `journalctl`
@@ -83,13 +91,15 @@ logs found `/var/log/syslog`
 ##### Aliases
 
 ceo@domain.com => ryan@domain.com
+
 staff@domain.com => will forward to anyone in staff (with `@domain.com`)
 
-
 `mutt` - m to prompt to & subject fields, $ refreshes the window
+
 `newaliases` - rebuilds the aliases
 
 `.forward` - file in home directory; where to forward the mails
+
 `mailq` - the mail queue
 
 ##### Printers and printing in Linux
@@ -102,8 +112,11 @@ staff@domain.com => will forward to anyone in staff (with `@domain.com`)
   + Provides web-based configuration and administration tool
 
 install `cups` and `cups-bsd`
+
 `/etc/cups/cupsd.conf`
 
 `lpr` - printing command
+
 `cupsdisable <printer name>` - disables the printer
+
 `cupsenable <printer name>` - enables the printer
