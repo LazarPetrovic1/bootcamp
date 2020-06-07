@@ -129,11 +129,11 @@ If external req: ARP-ing happens through the **default gateway** and data is sen
 
 > Subnets can be chopped up in many different ways, not just /24, /16 and /8
 
-![A /25 example subnet](subnettingclassless.png)
+![A /25 example subnet](subnetclassless.png)
 
 In this case, the subnet will be 255.255.255.128
 
-![A /25 example subnet](subnettingclassless2.png)
+![A /25 example subnet](subnetclassless2.png)
 
 By changing the 0 (white bead) to 1 (black bead), we get 2 separate subnets
 
