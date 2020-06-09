@@ -205,3 +205,183 @@ Foreign addresses are now displayed as IP addresses: most of them with port 443 
 `netstat -o` option will give back the process ID. The `-a` flag will show all active ports
 
 `netstate -r` - shows the local routing table
+
+### Web servers
+
+HTTP - HyperText Transfer Protocol, uses TCP port 80
+
+There are 2 competing versions of web server. Primary web server software is:
++ Microsoft IIS
++ Apache (open source)
+
+Is a web server running in a particular system? - `netstat -a` (see if it's listening on port 80)
+
+Browsers on the exam:
++ Internet Explorer (mainly)
++ Chrome
++ Firefox
++ Safari
+
+How to get to settings in Internet Explorer? - Tools > Internet options
+
+HTTPS - HTTP Secure
+
+Encrypts data using SSL or TLS. Wireshark packets capturing HTTPS are encrypted garble.
+
+### FTP - File Transfer Protocol
+
+It predates www.
+
+##### Client-side connections
+
+Using specifically designed software:
+
+![filezilla1](filezilla1.png)
+
++ Set an account
+
+| Perm files | Perm dirs        | Web req  |
+| ---------- | ---------------- | -------- |
+| Read       | List (+ subdirs) | GET      |
+| Write      | Create           | POST     |
+| Delete     | Delete           | DELETE   |
+| Append     | N/A              | PUT      |
+
++ Change permissions
+![filezilla2](filezilla2.png)
+
++ In order to download stuff, a "*very very famous*" account has to be created - ***anonymous*** with Read file perm and list + subdirs dir perm
+
+![ftpconn](ftpconn.png)
+
+*An established FTP connection (picture above)*
+
+But, that's not it. Pretty much every browser makes a good FTP client, too.
+
+> Instead of starting the URL with *https://*, start with *ftp://*
+
+OS's come with built-in ftp client in their terminal/command prompt
+
+![ftpcli](ftpcli.png)
+
+FTP can be connected to using:
+1. Software (like FileZilla)
+1. Browsers, by starting the URL with ftp://
+1. The command line or terminal `open <IP>`
+
+##### Server-side connections
+
+A server will be required (any OS).
+___
+
+FTP is not an encrypted protocol.
+
+***SFTP - Secure FTP*** (similar to HTTPS) uses SSL and TLS
+
+***TFTP or Trivial FTP*** is not as robust as FTP. It's a UDP protocol and runs on port 69.
+
+### E-mail servers and clients
+
+##### Client
+
+Old-school e-mail was sent and received, read and written using E-mail programs (clients), like Outlook (Windows) and Thunderbird (Linux)
+
+More modern variations of e-mails are web based, like GMail and Yahoo!
+
+On the sending side, ***SMTP - Simple Mail Transfer Protocol*** is used. It runs on port 25.
+
+The older one is called ***POP3 - Post Office Protocol v3***. It runs on port 110.
+
+POP3's competitor is called ***IMAP - Internet Message Access Protocol***. It runs on port 143.
+
+##### Server
+
+Below is an example of a mail server (hMailServer [Administrator, localhost])
+
+![servmail](servmail.png)
+
+Instead of using well known domains and endings (e.g .com, .net), anything can be used (so long as it's internal) and will work
+
+![localmail](localmail.png)
+
+This is how ThunderBird looks:
+
+![thbird](thbird.png)
+
+![thbirdsettings](thbirdsettings.png)
+
+What is the difference between POP and IMAP? - POP is much older. Everything in POP is copied to the computer. IMAP is a lot like web-based mail
+
+### Securing E-mail - Encryption
+
+##### A mail server and a client
+
+SMTP is run on 25, POP on 110, IMAP on 143
+
+Problems: These ports are unencrypted, there are no certificates and sniffers can listen to traffic unimpeeded.
+
+##### Standard TLS for encryption
+
+Encrypted IMAP is on port 993, POP on 995 and SMTP on 465
+
+Problem: Port hopping (25 => 465, 110 => 995, 143 => 993) was still an exploitable issue. Not end-to-end encrypted.
+
+##### STARTTLS
+
+IMAP, POP3 and SMTP were all merged into one port - 465 along with TLS, so that encryption could run end-to-end.
+
+Problem: TLS and STARTTLS started conflicting on port 465.
+
+Solution: STARTTLS officially re-ported to 587 (and has been there ever since).
+
+### Telnet and secure shell (SSH)
+
+***Telnet is a remote command-prompt to a far-away computer***
+
+The picture below is an image of a Telnet server.
+
+![telnet](telnet.png)
+
+Telnet requires user accounts. Telnet runs on port 23.
+
+For Windows, the biggest and most popular client is PuTTY (for Telnet and SSH, as well)
+
+![putty](putty.png)
+
+This is what an example Telnet connection looks like:
+
+![telnetterm](telnetterm.png)
+
+**Telnet is one of the oldest applications there is on the Internet. E-mail and Telnet.**
+
+Downside: Everything's in the clear, meaning unencrypted.
+
+This was fixed in SSH.
+
+![sshstuff](sshstuff.png)
+
+SSH is an encrypted version of Telnet (and much more). It runs on TCP port 22.
+
+SSH was also meant to replace *rlogin*, which used port 513 and was increadibly insecure (no username or password - instant connection).
+
+### Network Time Protocol
+
+There are computers on the web that set quite accurate times, and could be used to time updates.
+
+One of the NTP servers is [the Windows NTP](time.windows.com). NTP runs on port 123.
+
+A system with incorrect time can cause trouble on a network. These servers help fix that problem.
+
+### Network Service Scenarios
+
+**DHCP issues**
+
+Sc: Three machines are connected to a DHCP. One of the computers acts as a file server. Assuming that the DHCP has a range of 192.168.4.[2 - 254], we're already running into a problem. The file server will be making a lot of requests.
+
+Sol: Reserve an address for the file server. Make the range smaller (e.g from 100 to 254), because there are things that shouldn't move of change their IPs (like the server we have, printers, wireless access points, ...). MAC reservation is also an idea that could work with different apps, like a camera.
+
+Sc: John has a system, where he wants to log in and do his work, but he can't get in. He checks his IP address and sees that he got bakc 169.254.x.x. What should John consider as a problem.
+
+Sol: Since he's getting an APIPA, he's got getting an address from his DHCP server. From the last scenario, the file server will now always get an IP address, some camera will get an IP and other systems on the networks *sometimes will and sometimes won't* get a new IP address. The scope may possibly be exhausted. In this case, the scope should be broadened. Consider shortening your DHCP lease.
+
+We turn to an entire class of systems called ***IPAM - IP Address Management***. They can automatically create new DHCP scopes, they can set reservations, generate new blocks of addresses and keep the system up no matter what happens.
