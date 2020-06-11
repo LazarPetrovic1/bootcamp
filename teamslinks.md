@@ -2,3 +2,4 @@
 + [Q-Radar test 1](https://www.ibm.com/certify/exam?id=C1000-018&fbclid=IwAR2MIsKloTn3sX3koZMwIIJLWNH9F7VaQf8xuY_AFNuIYXDFmY7K_bngh9w)
 + [Q-Radar 2](https://www.ibm.com/certify/exam?id=C1000-018)
 + [Enrollment](https://www.securitylearningacademy.com/enrol/index.php?id=4269)
++ [QRadar SIEM v7.3.2 Fundamental Analysis](https://www.securitylearningacademy.com/course/view.php?id=4269)

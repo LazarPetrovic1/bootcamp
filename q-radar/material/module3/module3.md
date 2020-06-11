@@ -1,5 +1,7 @@
 # QRadar functional architecture and deployment models
 
+### Init
+
 + Functional requirements of Q-Radar
 ![funcreq](funcreq.png)
 
@@ -103,7 +105,7 @@ _________________________________________
 ![dplmod2](dplmod2.png)
 _________________________________________
 
-**Architecture**
+### Architecture
 
 ![hlcads](hlcads.png)
 
@@ -122,3 +124,61 @@ There are 3 types of Anomaly Detection Rule types (image below):
 ![ca2](ca2.png)
 
 ![qradarend2](qradarend2.png)
+_________________________________________
+
+### Dissecting the flow if a captured event
+
+![capture1](capture1.png)
+
+Follow a set of Checkpoint Firewall deny events through a stack of Q-Radar components.
+
++ FW denies a large amount of communication requests from individual src IP.
++ These FW deny events arrive at the Q-Radar Event Collector. Inside there:
+  - the overflow filter counts all the incoming raw events (so the limit is not exceeded)
+  - if it is, events are buffer overflowed and fed back into stream when input is below limit
++ The events are passed into Traffic Analysis module: autodiscovery of log sources is performed
+  - if the log source is known, the records are handed over to the appropriate DSM module
+  - if the log source is not known, but recognized, Q-Radar generates a new log source (+ previous step)
+  - if neither is true, the event is stored as unknown and listed as such in the console
++ Parsing in the DSM: event ID is extracted and a QID is assigned to the event (from the event data)
++ Events are then parsed through a coalescing filter (duplicate events are merged)
+
+*The following image refers to event collection*
+
+![eventlife1](eventlife1.png)
+
++ The Event Collector now sends the normalized FW deny events to an Event Processor (can be more than 1 collectors)
++ After reaching the event processor, the overflow filter counts the incoming normalized events (*limit!*)
++ The Custom Rule Engine evaluates every single event against every active rule
++ If no rules match the event, it is dropped from further processing - if 1 or more rules fire, it's marked for further processing and passed to the console
++ A new offense will be created or the event will be added to any number of existing offenses
++ Additionally, the CRE can stream every incoming event to the *Log Activity* tab, if configured
++ The Event Storage component stores all events (& flows) in the Ariel DB
++ The filter then passes data to the Accumulator
++ The Accumulator manages all the defined searches (Reports, Dashboards, etc) that have been set up on the console
++ Based on the search params, the Acc stores data in the Acc Ariel DB
++ These data are later used by the console to display results through the UI/by creating reports
++ Host Profiler receives evt data & searches for any new host, port or service evts
+  - if detected, they're sent to the Console's Vulnerability Information Server
+
+*The following image refers to event processing*
+
+![eventlife2](eventlife2.png)
+
++ The EP sends processed evts to the console for final processing (can come from multiple EPs)
++ Overflow filter does its thing (limit and stuff)
++ Magistrate processes the events from EP
++ Based on Index Property and Index Property Value, these evts need to be raised as an offense
++ The CRE checks if the evts are to be assigned to a new offense or an already existing offense
++ If Magistrate needs additional evt and flow records, it utilizes the Ariel Proxy to query the db
++ The Anomaly Detection Engine examines rules based on a threshold number, anomaly and behaviour
++ The VIS receives information about new hosts or ports that are not yet contained in its Asset db
+  - new assets are added to the PostgreSQL Asset db
+
+*The following image refers to the console processes*
+
+![eventlife3](eventlife3.png)
+
+##### Summary
+
+![eventlife4](eventlife4.png)
