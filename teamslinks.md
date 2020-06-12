@@ -3,3 +3,5 @@
 + [Q-Radar 2](https://www.ibm.com/certify/exam?id=C1000-018)
 + [Enrollment](https://www.securitylearningacademy.com/enrol/index.php?id=4269)
 + [QRadar SIEM v7.3.2 Fundamental Analysis](https://www.securitylearningacademy.com/course/view.php?id=4269)
++ [TestPrep](https://www.testpreptraining.com/c1000-018---ibm-qradar-siem-v732-fundamental-analysis-free-practice-test)
++ [Notebook](https://onedrive.live.com/?authkey=%21AI46f%2D7%2DkCrYFQo&cid=2E7C5744ED327CCE&id=2E7C5744ED327CCE%2117365&parId=2E7C5744ED327CCE%2111655&o=OneUp)
