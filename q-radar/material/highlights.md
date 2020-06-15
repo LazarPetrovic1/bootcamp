@@ -487,4 +487,900 @@ You can export events in Extensible Markup Language (XML) or Comma-Separated Val
 + **Export to XML > Full Export (All Columns)**
 + **Export to CSV > Visible Columns**
 + **Export to CSV > Full Export (All Columns)**
-___
+___________________________________________________
+
+You can use the Network Activity tab to monitor and investigate network activity (flows) in real time or conduct advanced searches.
+
+Tab toolbar options:
+1. Search
+  + New search
+  + Edit search
+  + Manage search results
+1. Quick searches
+1. Add filter
+1. Save criteria
+1. Save results
+1. Cancel
+1. False positive
+1. Rules
+  + Note: The anomaly detection rule options are visible only if you have the Network Activity > Maintain Custom Rules permission.
+  + Add threshold rule
+  + Add anomaly rule
+1. Actions
+  + Show all
+  + Print
+  + Export to XML
+  + Export to CSV
+  + Delete
+  + Notify
+1. Search toolbar
+  + Advanced search
+  + Quick filter
+1. View
+
+Right click:
+1. Filter on
+1. False positive
+1. More options
+1. Quick filter
+___________________________________________________
+
+Viewing normalized flows parameters:
+1. Current filters
+1. View
+1. Current statistics
+1. Charts
+1. Offense icon
+1. Flow type
+1. First packet time
+1. Storage time
+1. Destination IP
+1. Destination port
+1. Source bytes
+1. Destination bytes
+1. Total bytes
+1. Source packets
+1. Destination packets
+1. Total packets
+1. Protocol
+1. Application
+1. ICMP type/code - (If the flow has ICMP type and code information in a known format, this field displays as Type <A>. Code <B>, where <A> and <B> are the numeric values of the type and code.)
+1. Source flags - TCP/IP flags if applicable
+1. Destination flags - same as the previous parameter
+1. Source QoS
+  + Best effort
+  + Differentiated service
+  + Guaranteed service
+1. Destination QoS
+1. Flow source
+1. Flow Interface
+1. Source IF Index - (InterFace Index)
+1. Destination IF Index - (Same as previous)
+1. Source ASN - autonomous system number
+1. Destination ASN - same as previous
+
+Extra parameters for IPv6:
+1. Source IPv6
+1. Destination IPv6
+___________________________________________________
+
+Grouped flow options:
+1. Source/Destination IP
+1. Source IP
+1. Destination IP
+1. Source port
+1. Destination port
+1. Source network
+1. Destination network
+1. Application
+1. Geographic
+1. Protocol
+1. Flow bias
+1. ICMP type
+___________________________________________________
+
+Grouped flow parameters:
+1. Grouping by
+1. Current filters
+1. View
+1. Current statistics
+  + Total results
+  + Data files searched
+  + Compressed data files searched
+  + Index file count
+  + Duration
+1. Charts
+1. Source IP (Unique count)
+1. Destination IP (Unique count)
+1. Source port (Unique count)
+1. Destination port (Unique count)
+1. Source network (Unique count)
+1. Destination network (Unique count)
+1. Application (Unique count)
+1. Source bytes (Sum)
+1. Destination bytes (Sum)
+1. Source packets (Sum)
+1. Destination packets (Sum)
+1. Total packets (Sum)
+1. Count
+___________________________________________________
+
+The flow details page provides the following information:
+1. **Flow information**
+  + Protocol
+  + Application
+  + Magnitude
+  + Relevance
+  + Severity
+  + Credibility
+  + First packet time
+  + Last packet time
+  + Storage time
+  + Event name
+  + Low level category
+  + Event description
+1. **Source and destination information**
+  + Source IP
+  + Destination IP
+  + Source asset name
+  + Destination asset name
+  + IPv6 source
+  + IPv6 destination
+  + Source port
+  + Destination port
+  + Source QoS
+  + Destination QoS
+  1. Source ASN
+  + Destination ASN
+  + Source If Index
+  + Destination If Index
+  + Source payload
+  + Destination payload
+1. **Payload information**
+  + Source payload (w/ 3 formats):
+    - Universal Transformation Format (UTF)
+    - Hexadecimal (HEX)
+    - Base64 (Base64)
+  + Destination payload (same formats apply)
+1. ***Additional information***
+  + *Flow type* - they are all *unidirectional* and include:
+    - ***Type A*** - Single to many
+    - ***Type B*** - Many to single
+    - ***Type C*** - Single to single
+  + *Flow direction* - they include:
+    - ***L2L*** - internal local-to-local traffic
+    - ***L2R*** - internal local-to-remote traffic
+    - ***R2L*** - internal remote-to-local traffic
+  + Custom rules
+  + Custom rules partially matched
+  + Flow source/interface
+  + Annotations
+
+Flow details toolbar:
+1. Return to results
+1. Extract property
+1. False positive
+1. Previous
+1. Next
+1. Print
+1. Offense
+___________________________________________________
+
+***Exporting flows***:
+1. Click network activity tab
+1. If in streaming mode, click pause to stop streaming temporarily
+1. Select the desired option from actions:
+  + *Export to XML > Visible columns*
+  + *Export to XML > Full export (All columns)*
+  + *Export to CSV > Visible columns*
+  + *Export to CSV > Full export (All columns)*
+1. To resume activities, click *Notify when done*
+___________________________________________________
+
+**Asset data**
+> An asset is any network endpoint that sends or receives data across your network infrastructure. Every asset in the asset database is assigned a unique identifier so that it can be distinguished from other asset records.
+
+**Asset profiles**
+> An asset profile is a collection of all information that IBM QRadar SIEM collected over time about a specific asset. QRadar SIEM automatically creates asset profiles from identity events and bidirectional flow data or, if they are configured, vulnerability assessment scans. The asset name is derived from the information in the asset update in the following order of precedence:
+
++ Given name
++ NETBios host name
++ DNS host name
++ IP address
+
+**Collecting asset data**
+> Asset profiles are built dynamically from identity information that is passively absorbed from event or flow data, or from data that QRadar actively looks for during a vulnerability scan. You can also import asset data or edit the asset profile manually.
+___________________________________________________
+
+Asset data usually comes from one of the following asset data sources:
++ **Events** - This data is immediately provided to the asset database to help determine which asset the asset update applies to. Events are the primary cause for asset growth deviations.
++ **Flows** - Because asset data from flows is paired with an asset based on a single identifier, the IP address, flow data is never the cause of asset growth deviations.
++ **Vulnerability scanners** - It is possible for scanners to introduce asset growth deviations but it is rare.
++ **User interface** - Users who have the Assets role can import or provide asset information directly to the asset database. Asset updates that are provided by users do not introduce asset growth deviations.
++ **Domain-aware asset data** - When an asset data source is configured with domain information, all asset data that comes from that data source is automatically tagged with the same domain. Blank fields exist when the system did not receive this information in an asset update, or the information exceeded the asset retention period. The default retention period is 120 days. An IP address that appears as 0.0.0.0 indicates that the asset does not contain IP address information.
+
+![assetdataworkflowdiagram](assetdataworkflowdiagram.png)
+
+1. QRadar receives the event. The asset profiler examines the event payload for identity information.
+2. If the identity information includes a MAC address, a NetBIOS host name, or a DNS host name that are already associated with an asset in the asset database, then that asset is updated with any new information.
+3. If the only available identity information is an IP address, the system reconciles the update to the existing asset that has the same IP address.
+4. If an asset update has an IP address that matches an existing asset but the other identity information does not match, the system uses other information to rule out a false-positive match before the existing asset is updated.
+5. If the identity information does not match an existing asset in the database, then a new asset is created based on the information in the event payload.
+___________________________________________________
+
+***Asset reconciliation*** is the process of determining the relationship between asset updates and the related asset in the asset database. Asset reconciliation occurs after QRadar receives the update but before the information is written to the asset database.
+
+**Identity information**
+
+False positive asset matches occur when one physical asset is assigned ownership of an IP address that was previously owned by another asset in the system.
+
+When multiple pieces of identity data are provided, the asset profiler prioritizes the information from the most deterministic to the least in the following order:
++ MAC address
++ NetBIOS host name
++ DNS host name
++ IP address
+
+**Asset reconciliation exclusion rules**
+
+By default, each piece of asset data is tracked over a two-hour period. If any one piece of identity data in the asset update exhibits suspicious behavior two or more times within 2 hours, that piece of data is added to the asset blacklists.
+
+In domain-aware environments, the asset reconciliation exclusion rules track the behavior of asset data
+separately for each domain.
+
+**Asset merging**
+
+Asset merging is the process where the information for one asset is combined with the information for another asset under the premise that they are actually the same physical asset.
+
+Asset merging occurs when an asset update contains identity data that matches two different asset profiles.
+
+**Identification of asset growth deviations**
+
+Asset growth deviations occur when the number of asset updates for a single device grows beyond the limit that is set by the retention threshold for a specific type of the identity information.
+
+**Threshold settings**
+
+The Asset Profiler threshold settings specify the conditions under which an asset is blocked from updates.
+
+**System notifications that indicate asset growth deviations**
+
+The following system messages indicate that QRadar identified potential asset growth deviations:
++ `The system detected asset profiles that exceed the normal size threshold`
++ `The asset blacklist rules have added new asset data to the asset blacklists`
+
+**Required user action**
+
+The notification provides a link to a report of all assets that experienced deviating asset growth over the past 24 hours. QRadar administrators can increase the threshold limitsin the Asset Profiler Configuration on the QRadar Admin tab.
+
+**Asset blacklists and whitelists**
+
++ An asset blacklist is a collection of data that IBM QRadar considers untrustworthy. Data in the asset blacklist is likely to contribute to asset growth deviations and QRadar prevents the data from being added to the asset database.
+
++ An asset whitelist is a collection of asset data that overrides the asset reconciliation engine logic about which data is added to an asset blacklist. When the system identifies a blacklist match, it checks the whitelist to see whether the value exists. Whitelisted asset data is applied globally for all domains.
+
+**Asset blacklist**
+
+Blacklisted asset data is applied globally for all domains.
+
+*Reference collection names for asset blacklist data*
+
+| Type of identity data | Reference collection name              | Reference collection type       |
+| :-------------------- | :------------------------------------- | ------------------------------- |
+| IP address (v4)       | Asset Reconciliation IPv4 Blacklist    | Reference Set [Set Type: IP]    |
+| DNS host names        | Asset Reconciliation DNS Blacklist     | Reference Set [Set Type: ALNIC] |
+| NetBIOS host names    | Asset Reconciliation NetBIOS Blacklist | Reference Set [Set Type: ALNIC] |
+| MAC addresses         | Asset Reconciliation MAC Blacklist     | Reference Set [Set Type: ALNIC] |
+
+*ALNIC is an alphanumeric type that can accommodate both host name and MAC address values.*
+___________________________________________________
+
+**Types of asset whitelists**
+
+The following table shows the reference collection name and type for each type of identity asset data.
+
+| Type of identity data | Reference collection name              | Reference collection type       |
+| :-------------------- | :------------------------------------- | ------------------------------- |
+| IP address (v4)       | Asset Reconciliation IPv4 Whitelist    | Reference Set [Set Type: IP]    |
+| DNS host names        | Asset Reconciliation DNS Whitelist     | Reference Set [Set Type: ALNIC] |
+| NetBIOS host names    | Asset Reconciliation NetBIOS Whitelist | Reference Set [Set Type: ALNIC] |
+| MAC addresses         | Asset Reconciliation MAC Whitelist     | Reference Set [Set Type: ALNIC] |
+
+**Asset profiles**
+
+Asset profiles provide information about each known asset in your network, including what services are running on each asset. Asset profiles are automatically discovered if you have flow data or vulnerability assessment (VA) scans configured. For flow data to populate asset profiles, bidirectional flows are required. Asset profiles can also be automatically created from identity events.
+
+**Vulnerabilities**
+
+QRadar Vulnerability Manager is a component that you can purchase separately and enable using a license key. QRadar Vulnerability Manager is a network scanning platform that provides awareness of the vulnerabilities that exist within the applications, systems, or devices on your network.
+
+**Assets tab overview**
+
+Using the Assets tab, you can:
++ View all the discovered assets.
++ Manually add asset profiles.
++ Search for specific assets.
++ View information about discovered assets.
++ Edit asset profiles for manually added or discovered assets.
++ Tune false positive vulnerabilities.
++ Import assets.
++ Print or export asset profiles.
++ Discover assets.
++ Configure and manage third-party vulnerability scanning.
++ Start QRadar Vulnerability Manager scans.
+
+**Viewing an asset profile**
+
+Asset profile information is automatically discovered through Server Discovery or manually configured. You can edit automatically generated asset profile information.
+
+The Asset Profile page toolbar provides the following functions:
+1. Return to asset list
+1. Display - The Asset Summary and Network Interface Summary panes are always displayed.
+1. Edit asset
+1. View by network
+1. View source summary
+1. View destination summary
+1. History
+1. Applications
+1. Search connections - This option is only displayed when IBM QRadar Risk Manager has been purchased and licensed.
+1. View topology - This option is only displayed when IBM QRadar Risk Manager has been purchased and licensed.
+1. Actions
+___________________________________________________
+
+**Searching asset profiles**
+
+The search feature will allow you to search host profiles, assets, and identity information. Identity information provides more detail about log sources on your network, including DNS information, user logins, and MAC addresses.
+
+For example:
+You receive a notification that CVE ID: CVE-2010-000 is being actively used in the field. To verify whether any hosts in your deployment are vulnerable to this exploit, you can select **Vulnerability External Reference** from the list of search parameters, select CVE, and then type the:
+
+```
+  2010-000
+```
+
+**Importing assets**
+
+***The imported file must be a CSV file in the following format:***
+```
+  ip,name,weight,description
+```
+
+Where:
++ IP - Specifies any valid IP address in the dotted decimal format. For example: 192.168.5.34.
++ Name - Specifies the name of this asset up to 255 characters in length. Commas are not valid in this field and invalidate the import process. For example: WebServer01 is correct.
++ Weight - Specifies a number from 0 to 10, which indicates the importance of this asset on your network. A value of 0 denotes low importance and 10 is very high.
++ Description - Specifies a textual description for this asset up to 255 characters in length. This value is optional.
+
+The import process merges the imported asset profiles with the asset profile information you have currently stored in the system.
+
+**Exporting assets**
+
+You can export listed asset profiles to an Extended Markup Language (XML) or Comma-Separated Value (CSV) file.
+
+**Research asset vulnerabilities**
+
+The Vulnerabilities pane on the Asset Profile page displays a list of discovered vulnerabilities for the asset.
+
+The **Research Vulnerability Details** window provides the following details:
+1. Vulnerability ID
+1. Published date
+1. Name
+1. Assets
+1. Assets, including exceptions
+1. CVE - CVE identifiers are provided by the NVDB.
+1. xforce
+1. OSVDB
+1. Plugin details
+1. CVSS score base
+  + Collateral Damage Potential
+  + Confidentiality Requirement
+  + Availability Requirement
+  + Integrity Requirement
+1. Impact
+1. CVSS base metrics
+  + Access Vector
+  + Access complexity
+  + Authentication
+  + Confidentiality impact
+  + Integrity impact
+  + Availability impact
+1. Description
+1. Concern
+1. Solution
+1. Virtual patching
+1. Reference
+  + Reference type
+  + URL
+1. Products
+  + Vendor
+  + Product
+  + Version
+___________________________________________________
+
+**Chart management**
+
+Charts do not display while in streaming mode.
+
+Chart types include:
++ Bar Chart - Displays data in a bar chart. This option is only available for grouped events.
++ Pie Chart - Displays data in a pie chart. This option is only available for grouped events.
++ Table - Displays data in a table. This option is only available for grouped events.
++ Time Series - Displays an interactive line chart that represents the records that are matched by a specified time interval. For information about configuring time series search criteria.
+
+After you configure a chart, your chart configurations are retained when you:
++ Change your view by using the **Display** list box.
++ Apply a filter.
++ Save your search criteria.
+Your chart configurations are not retained when you:
++ Start a new search.
++ Access a quick search.
++ View grouped results in a branch window.
++ Save your search results.
+
+**Time series chart overview**
+
+Time series charts are graphical representations of your activity over time.
+
+Peaks and valleys that are displayed in the charts depict high and low volume activity. Time series charts are useful for short-term and long term trending of data.
+
+You can magnify and scan a timeline on a time series chart to investigate activity. The following list provides functions that you can use to view time series charts.
+
+1. View data in greater detail
+  + Move your mouse pointer over the chart, and then use your mouse wheel to magnify the chart (roll the mouse wheel up).
+  + Highlight the area of the chart you want to magnify. When you release your mouse button, the chart displays a smaller time segment. Now you can click and drag the chart to scan the chart.
+1. View a larger time span of data
+  + Click Zoom Reset at the upper left corner of the chart.
+  + Move your mouse pointer over the chart, and then use your mouse wheel to expand the view (roll the mouse wheel down).
+1. Scan the chart
+
+**Configuring charts**
+
+You use configuration options to change the chart type, the object type you want to chart, and the number of objects that are represented on the chart. For time series charts, you can also select a time range and enable time series data capture.
+
+Configure the following parameters:
+1. Value to graph
+1. Display top - The number of objects that you want to view in the chart. The default is 10.
+1. Chart type - If your bar, pie, or table chart is based on saved search criteria with a time range of more than 1 hour, you must click Update Details to update the chart and populate the event details.
+1. Capture time series data - Enables time series data capture. When you select this check box, the chart begins accumulating data for time series charts. By default, this option is disabled.
+1. Time range
+
+To view the list of events or flows if your time range is greater than 1 hour, click Update Details.
+___________________________________________________
+
+On the Log Activity, Network Activity, and Offenses tabs, you can specify filter criteria to search for events, flows, and offenses.
+
+The following list describes the search options that you can use to search event and flow data:
+1. Group
+1. Type saved search or select from list
+1. Available saved searches
+1. Search
+1. Include in my Quick Searches
+1. Include in my dashboard
+1. Set as default
+1. Share with everyone
+1. Real time
+1. Last interval (auto refresh)
+1. Recent
+1. Specific interval
+1. Data accumulation - Use the Enable Unique Counts/Disable Unique Counts link to display unique event and flow counts instead of average counts over time. After you click the Enable Unique Counts link, a dialog box opens and indicates which saved searches and reports share the accumulated data.
+1. Current filters
+1. Save results when the search is complete
+1. Display
+1. Name
+1. Save column layout
+1. Delete column layout
+1. Type column or select from list
+1. Available columns
+1. Add or remove column arrows (top set)
+1. Add or remove column arrows (bottom set)
+1. Group by
+1. Columns
+1. Move columns between the *group by* list and the *columns* list
+1. Order by
+1. Results limit
+
+To automatically save the search results when the search is complete, select the **Save results when
+search is complete** check box.
+
+**Saving search criteria**
+
+If you specify a time range for your search, then your search name is appended with the specified time
+range [`$name - $time-range`].
+
+**Scheduled search**
+
+Unlike reports, you have the option of grouping the search results and investigating further. You can schedule a search on events or flows from the **Reports** tab. You must select a previously saved set of search criteria for scheduling.
+
+QRadar does not support reports based on AQL searches that contain subselect statements.
+
+You can view the results of your scheduled search from the **Offenses** tab.
+
+If you create an individual offense, an offense is generated each time that the report is run. If you add the saved search result to an existing offense, an offense is created the first time that the report runs. Subsequent report runs append to this offense. If no results are returned, the system does not append or create an offense.
+
+To view the most recent search result in the **Offense Summary** window, double-click a scheduled search offense in the offense list. To view the list of all scheduled search runs, click **Search Results** in the **Last 5 Search Results** pane. You can assign a Scheduled search offense to a user.
+
+**Advanced search options**
+
+When you type an AQL query, use single quotation marks for a string comparison, and use double
+quotation marks for a property value comparison.
+
+*Insight across multiple identifiers*
+
+The following query returns the user accounts that are used by a global ID on events that are flagged as suspicious.
+
+```sql
+  SELECT
+  REFERENCEMAP('GlobalID Mapping',username) as 'Global ID',
+  REFERENCETABLE('user_data','FullName', 'Global ID') as 'Full Name',
+  UNIQUECOUNT(username),
+  COUNT(*) as 'Event count'
+  FROM events
+  WHERE RULENAME(creEventlist) ILIKE '%suspicious%'
+  GROUP BY 'Global ID'
+  LAST 1 days
+```
+
+**External threat intelligence**
+
+Advanced searches can cross-reference external threat intelligence indicators with other security events and usage data.
+
+**Asset intelligence and configuration**
+
+Threat and usage indicators vary by asset type, operating system, vulnerability posture, server type, classification, and other parameters.
+
+The **Assetproperty** function retrieves property values from assets, which enables you to include asset data in the results.
+
+The **AssetUser** function retrieves the user name from the asset database.
+
+**Network LOOKUP function**
+
+You can use the **Network LOOKUP** function to retrieve the network name that is associated with an IP address.
+
+**Rule LOOKUP function**
+
+You can use the **Rule LOOKUP** function to retrieve the name of a rule by its ID.
+
+**Full TEXT SEARCH**
+
+You can
+search for these events by using the Quick filter option and the Advanced search option on the Log
+Activity tab.
++ To use the **Quick filter** option, type the following text in the **Quick filter** box: 'firewall'
++ To use the **Advanced search** option, type the following query in the **Advanced search** box:
+
+```sql
+  SELECT QIDNAME(qid) AS EventName, * from events where TEXT SEARCH 'firewall'
+```
+
+**Custom property**
+
+You can access custom properties for events and flows when you use the **Advanced search** option.
+
+**Quick filter search options**
+
+> Search event and flow payloads by typing a text search string that uses simple words or phrases.
+
+When you view flows in real-time (streaming) or last interval mode, you can type only simple words or phrases in the **Quick Filter** field. When you view **events** or **flows** in a time-range, follow these syntax guidelines:
+
+***Quick filter syntax guidelines (description left - example right)***
+
+Include any plain text that you expect to find in the payload - `Firewall`
+Search for exact phrases by including multiple terms in double quotation marks. - `Firewall deny`
+Include single and multiple character wildcards. The search term cannot start with a wildcard. - `F?rewall or F??ew*`
+Group terms with logical expressions, such as AND, OR, and NOT. To be recognized as logical expressions and not as search terms, the syntax and operators must be uppercase. - `(%PIX* AND ("Accessed URL" OR "Deny udp src") AND 10.100.100.*)`
+When you create search criteria that includes the NOT logical expression, you must include at least one other logical expression type, otherwise, no results are returned. - `(%PIX* AND ("Accessed URL" OR "Deny udp src") NOT 10.100.100.*)`
+Precede the following characters by a backslash to indicate that the character is part of your search term: + - && || ! () {} [] ^ " ~ * ? : \ . - `%PIX\-5\-304001"`
+
+> Quick filter searches use the English locale. *Locale* is a setting that identifies language or geography and determines formatting conventions such as collation, case conversion, character classification, the language of messages, date and time representation, and numeric representation. The locale is set by your operating system. You can configure QRadar to override the operating system locale setting.
+
+If you choose a locale that is not English, you can use the Advanced search option in QRadar for searching event and payload data.
+
+**Identifying whether a flow's direction was reversed**
+
+By knowing that the flow was reversed and what algorithm triggered this reversal, you can work out how the flow appeared on your network originally.
+
+**Flow direction algorithm values**
+The following table displays the values that are used in the flow direction algorithm.
+
+| Numval | Description                                      |
+| :----- | :----------------------------------------------- |
+| 0      | Unknown                                          |
+| 1      | Single common destination port                   |
+| 2      | Both common destination port, RFC 1700 preferred |
+| 3      | Arrival time                                     |
+| 4      | Flow exporter                                    |
+
+**Identifying how application fields are set for a flow**
+
+You might have non-standard or customized applications in your organization that you previously added to the `/opt/qradar/conf/user_application_mapping.conf` or `signatures.xml` files so that these applications are identified in QRadar.
+
+Now you can use the **Application Determination Algorithm** field to check that the correct algorithm identified your customized applications.
+
+**Application determination algorithm values**
+
+The following table displays the values that are used in the application determination algorithm.
+
+| Numval | Description               |
+| :----- | :------------------------ |
+| 1      | Unknown                   |
+| 2      | Application signatures    |
+| 3      | State-based decoding      |
+| 4      | QRadar port-based mapping |
+| 5      | User port-based mapping   |
+| 6      | ICMP protocol mapping     |
+| 7      | Flow exporter             |
+
+**VLAN information in network activity flow records**
+
+The following VLAN fields are supported for IPFIX, Netflow version 9, and J-Flow.
++ vlanId
++ postVlanId
++ dot1qVlanId
++ dot1qPriority
++ dot1qCustomerVlanId
++ dot1qCustomerPriority
++ postDot1qVlanId
++ postDotqCustomerVlanId
++ dot1qDEI (raw packets only)
++ dot1qCustomerDEI (raw packets only)
+
+The following VLAN fields are supported for raw packets and sFlow version 5.
++ dot1qVlanId
++ dot1qPriority
++ dot1qCustomerVlanId
++ dot1qCustomerPriority
++ dot1qDEI
++ dot1qCustomerDEI
+
+All flows with VLAN information contain two IBM-specific fields that can be used to define unique domains in QRadar:
++ Enterprise VLAN ID
++ Customer VLAN ID
+
+**Assign domains and tenants to flows with VLAN information**
+
+In QRadar, you can assign domains to incoming flows based on the VLAN information that is contained in the flow. The incoming flows are mapped to domains that contain the same VLAN definition.
+
+You can assign tenants to domain definitions to achieve multi-tenancy. The VLAN-based domain definitions enable multi-tenancy across different VLAN
+
+**Visibility into MPLS flows received from IPFIX data**
+
+Internet Protocol Flow Information Export (IPFIX) is a common protocol that allows exporting of flow information from network devices.
+
+The MPLS stack can contain up to 10 layers where each layer shows information about the flow routing. These MPLS fields are included in rules, searches, and filters, and can be viewed in the Flow Details window.
+
+**IPFIX MPLS information elements**
+
+| Field                     | ElementID |
+| :------------------------ | :-------- |
+| mplsTopLabelType          | 46        |
+| mplsTopLabelIPv4Address   | 47        |
+| mplsTopLabelStackSection  | 70        |
+| mplsLabelStackSection2    | 71        |
+| mplsLabelStackSection3    | 72        |
+| mplsLabelStackSection4    | 73        |
+| mplsLabelStackSection5    | 74        |
+| mplsLabelStackSection6    | 75        |
+| mplsLabelStackSection7    | 76        |
+| mplsLabelStackSection8    | 77        |
+| mplsLabelStackSection9    | 78        |
+| mplsLabelStackSection10   | 79        |
+| mplsVpnRouteDistinguisher | 90        |
+| mplsTopLabelPrefixLength  | 91        |
+| mplsTopLabelIPv6Address   | 140       |
+| mplsPayloadLength         | 194       |
+| mplsTopLabelTTL           | 200       |
+| mplsLabelStackLength      | 201       |
+| mplsLabelStackDepth       | 202       |
+| mplsTopLabelExp           | 203       |
+| postMplsTopLabelExp       | 237       |
+| pseudoWireType            | 250       |
+| pseudoWireControlWord     | 251       |
+| mplsLabelStackSection     | 316       |
+| mplsPayloadPacketSection  | 317       |
+| sectionOffset             | 409       |
+| sectionExportedOctets     | 410       |
+___________________________________________________
+
+**Offense searches**
+
+*My Offenses and All Offenses page search options*
+
+1. Group
+1. Type saved search or select from list
+1. Available saved searches
+1. All offenses
+1. Recent
+1. Specific interval
+  + Start date between
+  + Last event/flow between
+1. Search
+1. Offense ID
+1. Description
+1. Assigned to user
+1. Direction
+  + Local to Local
+  + Local to Remote
+  + Remote to Local
+  + Remote to Remote
+  + Local to Remote or Local
+  + Remote to Remote or Local
+1. Source IP
+1. Destination IP
+1. Magnitude
+1. Severity
+1. Credibility
+1. Relevance
+1. Contains username
+1. Source network
+1. Destination network
+1. High level category
+1. Low level category
+1. Exclude
+  + Active Offenses
+  + Hidden Offenses
+  + Closed Offenses
+  + Inactive offenses
+  + Protected Offense
+1. Close by user
+1. Reason for closing
+1. Events
+1. Flows
+1. Total events/flows
+1. Destinations
+1. Log source group
+1. Log source
+1. Rule group
+1. Rule
+1. Offense type
+
+The following table describes the options available in the **Offense Type** list box:
+1. Any
+1. Source IP
+1. Destination IP
+1. Event name
+  + To search for a QID by category, select the Browse by Category check box and select the high- or low-level category from the list boxes.
+  + To search for a QID by log source type, select the Browse by Log Source Type check box and select a log source type from the Log Source Type list box.
+  + To search for a QID by log source type, select the Browse by Log Source Type check box and select a log source type from the Log Source Type list box.
+  + To search for a QID by name, select the QID Search check box and type a name in the QID/ Name field.
+1. Username
+1. Source MAC address
+1. Destination MAC address
+1. Log source
+1. Host name
+1. Source port
+1. Destination port
+1. Source IPv6
+1. Destination IPv6
+1. Source ASN
+1. Destination ASN
+1. Rule
+1. App ID
+
+On the Search Parameters pane, define your specific search criteria.
+
+On the Offense Source pane, specify the offense type and offense source you want to search:
+
+In the Column Definition pane, define the order in which you want to sort the results:
+
+*By Source IP page search options*
+
+1. All offenses
+1. Recent
+1. Specific interval
+  + Start date between
+  + Last event/flow between
+1. Search
+1. Source IP
+1. Magnitude
+1. VA risk
+1. Events/Flows
+1. Exclude
+  + **Active Offenses**
+  + **Hidden Offenses**
+  + **Closed Offenses**
+  + **Inactive offenses**
+  + **Protected Offense**
+
+**Searching offenses on the By Destination IP page**
+
+1. All offenses
+1. Recent
+1. Specific interval
+  + Start date between
+  + Last event/flow between
+1. Search
+1. Destination IP
+1. Magnitude
+1. VA risk
+1. Events/flows
+
+**Searching offenses on the By Networks page**
+
+1. Network
+1. Magnitude
+1. VA risk
+1. Event/flows
+
+**Saving search criteria on the Offenses tab**
+
+1. Parameter
+1. Search name
+1. Manage groups
+1. Timespan options
+  + All offenses
+  + Recent
+  + Specific interval
+1. Set as default
+
+**Searching for offenses that are indexed on a custom property**
+
+You can use the offense type in your search criteria to find all offenses that are based on a custom property.
+
+The **Offense Type** list shows only normalized fields and custom properties that are used as rule indexes.
+
+When you view the offense summary, the custom property that you searched on is shown in the **Offense Type** field. The custom property capture result is shown in the **Custom Property Value** field in the **Offense Source Summary** pane.
+
+**Finding IOCs quickly with lazy search**
+
+You use the IBM QRadar lazy search to search for an indicator of compromise (IOC), such as unusual outbound network traffic or anomalies in privileged user account activity.
+
+*Lazy search* returns the first 1000 events that are related to the search criterion.
+
+To take advantage of the lazy search, you must have the Admin security profile, or a non-administrator security profile that is configured in the following way:
++ Permission precedence set to No Restrictions.
++ Access to all networks and log sources.
+Lazy search cannot be used by users with non-administrator security profiles on networks where domains are configured.
+___________________________________________________
+
+1. To do a lazy search for quick filters, do these steps:
+  + On the Log Activity tab, in the Quick Filter field, enter a value.
+  + From the View list, select a time range.
+2. To do a lazy search for basic searches, do these steps:
+  + On the Log Activity tab, click Search > New Search.
+  + Select a Recent time range or set a Specific Interval.
+  + Ensure that Order by field value is set to Start Time and the Results Limit field value is 1000 or
+less. Aggregated columns must not be included in the search.
+  + Enter a value for the Quick Filter parameter and click Add Filter.
+3. To disable lazy search completely, do these steps:
+  + Click the System Settings on the Admin tab.
+  + In the System Settings window, remove any values from the Default Search Limit field.
+
+**Deleting search criteria**
+
+When you delete a saved search, then objects that are associated with the saved search might not function. Reports and anomaly detection rules are QRadar objects that use saved search criteria.
+
+**Using a subsearch to refine search results**
+
+You can use a subsearch to search within a set of completed search results. When you define a search that you want to use as a base for subsearching, make sure that Real Time (streaming) option is disabled and the search is not grouped.
+
+The Current Filter pane specifies the filters that are applied to the subsearch.
+
+**Managing search results**
+
+You can configure a search to send you an email notification when the search is complete.
+
+**Managing search groups**
+
+Using the **Search Groups** window, you can create and manage event, flow, and offense search groups.
+
+All saved searches that are not assigned to a group are in the **Other** group.
+
+*Search Group window parameters*
+1. Name
+1. User
+1. Description
+1. Date modified
+
+*Search Group window toolbar functions*
+1. New group
+1. Edit
+1. Copy
+1. Remove
+
+**Removing a group or a saved search from a group**
+
+When you remove a saved search from a group, the saved search is not deleted from your system. The saved search is removed from the group and automatically moved to the Other group.
+You cannot remove the following groups from your system:
++ Event Search Groups
++ Flow Search Groups
++ Offense Search Groups
++ Other
+___________________________________________________
