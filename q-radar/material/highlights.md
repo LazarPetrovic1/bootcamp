@@ -1384,3 +1384,546 @@ You cannot remove the following groups from your system:
 + Offense Search Groups
 + Other
 ___________________________________________________
+
+You can use custom properties to extract that data from the event or flow payload, and then use the non-normalized data in custom rules, searches, and reports.
+
+**Extraction-based properties**
+
+Create an extraction-based property when you want to use a regex or JSON expression to parse the property values from the event or flow payloads.
+
+When the event or flow is parsed, the expression pattern is tested against each payload until the pattern matches. The first pattern to match the event or flow payload determines the data to be extracted.
+
+**Calculation-based properties**
+
+Create a calculation-based property when you want to do calculations on existing numeric event and flow properties.
+
+**AQL-based properties**
+
+Create an AQL-based property when you want to combine multiple extraction and calculation-based properties into a single property.
+
+***Note***:
++ The AQL expression can include AQL functions.
++ It does not support expressions that use `SELECT`, `FROM`, or database names.
++ You cannot use aggregate functions, such as `SUM` or `GROUP`, or other AQL-based custom properties.
+
+**Creating a custom property**
+
+Create a custom property to extract data that IBM QRadar does not typically show from the event or flow payloads. Custom properties must be enabled, and extraction-based custom properties must be parsed, before you can use them in rules, searches, reports, or for offense indexing.
+
+**Before you begin**
+
+To create custom event properties, you must have the **User Defined Event Properties** permission. To create custom flow properties, you must have the **User Defined Flow Properties** permission. Users with administrative capabilities can create custom event and flow properties by selecting **Custom Event Properties** or **Custom Flow Properties** on the **Admin** tab.
+
+If you are creating an extraction-based custom property that is to be used in rules, search indexes, or forwarding profiles, ensure that the **Parse in advance for rules, reports, and searches** check box is selected.
+
+**Modifying or deleting a custom property**
+
+You can search for a specific property by using the **Search properties** field. The search is not case- sensitive.
+
+To delete a property, you must first remove all dependencies to it. Deleting a custom property does not delete the indexed property fields from the Ariel database.
+
+**Defining custom properties by using custom property expressions**
+
+Define a custom property for an event payload by using a Regex, JSON, LEEF, or CEF expression.
+
+Regex parsing runs through the entire payload, while the others run when their valid syntax is detected.
+
+*Procedure*
+1. Log in to QRadar and click the **Admin** tab.
+2. From the **Data Sources** section, click **ustom Event Properties**, and then click **Add**.
+3. In the **Property Type Selection** section, select **Extraction Based**.
+4. In the **Test Field**, enter the event payload that you want to use to test your custom property.
+5. In the **Property Definition** section, complete the following steps:
+  + If you're adding an expression to an existing property, select **Existing Property** and select a property from the list.
+  + If you're defining a new property, select **New Property** and enter the name of the property.
+  + To use the property for rules, reports and searches, select the **Parse in advance for rules, reports, and searches** check box.
+    - Note: When you select the check box, properties are parsed when the event is initially received and before it is stored.
+    + Select a **Field Type** for the property.
+      - **Note**: If you choose IP as the type for your custom property, QRadar supports only IPv4.
+    + Optional: Enter a description for the property.
+6. In the **Property Expression Definition** section, complete the following steps:
+  + Keep the **Enabled** check box selected; otherwise, clear the check box to disable the property.
+  + From the **Log Source Type** list, select a log source type for the property.
+  + If the expression is only evaluated against events for a specific log source, select the log source from the **Log Source** list. If you want it to be evaluated against all log sources, don't select.
+  + If the expression is only evaluated against events with a specific event name or QID, click the **Event Name** and browse for a QID to associate the expression with.
+  + If the expression is evaluated against any event with a specific low-level category, select **Category**, and select the **High Level Category** and then **Low Level Category** for the event.
+    - **Note**: If the expression is evaluated for all events of the selected log source type and log source, ensure that you set the **High Level Category** and **Low Level Category** to **Any**.
+  + From the **Extraction using** field, select the extraction method to use for the property.
+  + If the extraction method is **Regex**, enter the regex and the capture group number.
+  + If the extraction method is **JsonKeypath**, enter the JSON expression.
+  + If the extraction method is **LEEF Key**, enter the LEEF expression.
+    - **Note**: Valid LEEF expressions are in the form of either a single key reference, or a special LEEF header field reference.
+  + If the extraction method is **CEF Key**, enter the CEF expression.
+    - **Note**: Valid CEF expressions are in the form of either a single key reference, or a special CEF header field reference.
+  + If you chose the Numeric **Field Type** in the **Property Definition** section, select a number format in
+    the **Extracted Number Format** field in the **Format** section to define any digit group separators for
+    the locale of the custom property.
+  + If you chose the Date/Time **Field Type** in the **Property Definition** section, enter a format in the
+    **Extracted Date/Time Format** and **Locale** fields in the **Format** section to define the date and time
+    for the locale of the custom property.
+  + Click **Test** to test the property expression definition.
+7. Click **Save**
+___________________________________________________
+
+**What are rules?**
+
+Custom rules test events, flow, and offenses to detect unusual activity in your network. You create new rules by using AND and OR combinations of existing rule tests. Anomaly detection rules test the results of saved flow or events searches to detect when unusual traffic patterns occur in your network. Anomaly detection rules require a saved search that is grouped around a common parameter.
+
+**What are building blocks?**
+
+A building block is a collection of tests that ***don't*** result in a response or an action.
+
+QRadar has default rules and you can also download more rules from the IBM Security App Exchange to create new rules.
+
+**How do rules work?**
+
+QRadar Event Collectors gather events from local and remote sources, normalizes these events, and
+classifies them into low-level and high-level categories. When a rule condition is met, the Event Processor generates an action that is defined in the rule response.
+
+**How is an offense created from a rule?**
+
+QRadar creates an offense when events, flows, or both meet the test criteria that is specified in the rules. QRadar analyzes the following information:
++ Incoming events and flows
++ Asset information
++ Known vulnerabilities
+The rule that created the offense determines the offense type.
+
+The magistrate prioritizes the offenses and assigns the magnitude value based on several factors, including number of events, severity, relevance, and credibility.
+
+**Custom rules**
+***Rule types***
+Each of the event, flow, common, and offense rule types test against incoming data from different sources in real time
+
++ *Event rules*
+  Test against incoming log source data that is processed in real time by the QRadar Event Processor.
+  It is common for event rules to create offenses as a response.
++ *Flow rules*
+  Test against incoming flow data that is processed by the QRadar Flow Processor.
+  It is common for flow rules to create offenses as a response.
++ *Common rules*
+  Test against event and flow data. For example, you can create a common rule to detect events and flows that have a specific source IP address. It is common for common rules to create offenses as a response.
++ *Offense rules*
+  Test the parameters of an offense to trigger more responses. An offense rule processes offense only when changes are made to the offense.
++ *Managing rules*
+  You can create, edit, assign rules to groups, and delete groups of rules.
++ *Domain-specific rules*
+  If a rule has a domain test, you can restrict that rule so that it is applied only to events that are happening within a specified domain. To create a rule that tests conditions across the entire system, set the domain condition to **Any Domain**.
+
+**Rule conditions**
+
+You can run tests on the property of an event, flow, or offense, (e.g source IP address, severity of event, or rate analysis.)
+
+With functions, you can use building blocks and other rules to create a multi-event, multi-flow, or multi- offense function. You can connect rules by using functions that support Boolean operators, such as OR and AND.
+
+**Creating a custom rule**
+
+***Offenses > Maintain Custom Rules*** permission required.
+
+Start with a rule test for a specific log source type, network location, flow source, or context (R2L, L2R, L2L). Any mid-level tests might include IP addresses, port traffic, or any other associated test. The rule should test payload and regex expressions last.
+
+When you delete an item from a group, the rule or building block is only deleted from the group; it remains available on the Rules page. When you delete a group, the rules or building blocks of that group remain available on the Rules page.
+
+[167 - creating a custom rule - look!]
+
+**Configuring an event or flow as false positive**
+
+You can prevent events and flows from correlating into offenses by configuring them as false positives.
+
+To edit false positive tuning, use the **User-BB_FalsePositive: User Defined Positive Tunings building** block in the **Rules** section on the **Offenses** tab.
+
+**Anomaly detection rules**
+
+Anomaly detection rules test the results of saved flow or events searches to detect when unusual traffic patterns occur in your network.
+
+Anomaly detection rules require a saved search that is grouped around a common parameter, and a time series graph that is enabled. Typically the search needs to accumulate data before the anomaly rule returns any result that identifies patterns for anomalies, thresholds, or behavior changes.
+
+**Anomaly rules**
+
+Test event and flow traffic for changes in short-term events when you are comparing against a longer time frame.
+
+**Threshold rules**
+
+Test events or flows for activity that is greater than or less than a specified range.
+
+**Behavioral rules**
+
+Test events or flows for volume changes that occur in regular patterns to detect outliers.
+[172 - table 44]
+
+**Creating an anomaly detection rule**
+
+Anomaly detection rules test the result of saved flow or event searches to search for unusual traffic patterns that occur in your network.
+
++ Anomaly detection on **Log activity** - ***Log Activity Maintain Custom Rules*** permission required
++ Anomaly detection on **Network activity** - ***Network Activity Maintain Custom Rules*** permission required
+
+To manage default and previously created anomaly detection rules, use the **Rules** page on the **Offenses** tab.
+
+An anomaly detection rule tests the selected accumulated property for each event or flow group separately.
+
+[174 - table 45]
+
+**Configuring a rule response to add data to a reference data collection**
+
+QRadar supports the following data collection types:
++ Reference set - A set of elements, that are derived from events and flows that are occurring on your network.
++ Reference map - Data is stored in records that map a key to a value.
++ Reference map of sets - Data is stored in records that map a key to multiple values.
++ Reference map of maps - Data is stored in records that map one key to another key, which is then mapped to single value.
++ Reference table - In a reference table, data is stored in a table that maps one key to another key, which is then mapped to single value. You can configure a rule response to add one or more keys that are defined in the table.
+
+> Create the reference data collection by using the **Reference Set Management** widget on the **Admin** tab. You can also create a reference data collection by using the `ReferenceDataUtil.sh` script.
+
+**Editing building blocks**
+
+You can save a group of tests as building blocks for use with rules.
+
+**Rule performance visualization**
+
+With rule performance visualization, you can easily determine the efficiency of rules in the QRadar pipeline, directly from the **Rules** page.
+
+**Note**: You must be an ***Administrator*** to turn on rule performance visualization. After rule performance visualization is turned on, users can view performance metrics for rules.
+
+When events or flows are routed to storage, QRadar begins collecting metrics on enabled rules for
+efficiency measures. Metrics are collected on all event, common, and flow rules.
+
+**View the metrics for a rule**
+
+You can view the metrics for a rule from the **Rules** page when you move the mouse pointer over the colored bars in the Performance column, and in the **Performance Analysis** textbox, which is in the lower-right corner of the **Rules** page. You can also view the metrics for a rule in the **Rule Wizard**. The timestamp in the **Performance Analysis** textbox shows when the metrics for the rule were updated. [181 - img "Figure 15"]
+
+**Colors and bars in the Performance column on the Rules page**
+
+The number of bars that display is a visual aid for color blindness.
+
+**One red bar**
+The rule is under-performing and needs to be tuned. The EPS/FPS throughput for this rule is below the lower limit. Open the rule and tune the tests.
+
+**Two orange bars**
+
+The rule might need some tuning.
+
+**Three green bars**
+
+The rule has a high throughput above the upper limit of the EPS/FPS threshold.
+___________________________________________________
+
+Use historical correlation to run past events and flows through the custom rules engine (CRE) to identify threats or security incidents that already occurred.
+
+**Restriction**: You cannot use historical correlation in IBM QRadar Log Manager.
+
+With historical correlation, you can correlate by either the start time or the device time. *Start time* is the time that the event was received by QRadar. *Device time* is the time that the event occurred on the device.
+
+**Data selection**
+
+The profile uses a saved search to collect the historical event and flow data to use in the run.
+
+**Rule selection and handling**
+
+***You must have permission to view both events and flows before you can add common rules to the profile***. You can include disabled rules in a historical correlation profile. To avoid generating unnecessary distractions, rule responses, such as report generation and mail notifications, are ignored during historical correlation.
+
+**Offense creation**
+
+Historical correlation runs create offenses only when a rule is triggered and the rule action specifies that an offense must be created. A historical correlation run does not contribute to a real-time offense, nor does it contribute to an offense that was created from an earlier historical correlation run, even when the same profile is used.
+
+The maximum number of offenses that can be created by a historical correlation run is 100.
+
+You can view historical offenses on the **Threat and Security Monitoring** dashboard and on the **Offenses** tab at the same time that you review real-time offenses.
+
+**Creating a historical correlation profile**
+
+You create a historical correlation profile to rerun past events and flows through the custom rules engine (CRE). The profile includes information about the data set and the rules to use during the run.
+
+You can configure a profile to correlate by either start time or device time. Events can be correlated by start time or device time. Flows can be correlated by start time only.
+[185 - procedure 1 - look]
+
+**Viewing information about historical correlation runs**
+
+You can view the history for historical correlation runs that are queued, running, complete, complete with errors, and canceled.
+
+A historical correlation catalog is created for each rule that is triggered for each unique source IP address during the run, even if an offense was not created. The catalog contains all the events or flows that either fully or partially match the triggered rule.
+
+You cannot build reports on historical correlation data directly from QRadar. If you want to use third-party programs to build reports, you can export the data from QRadar. [185 - procedure 2 - look]
+___________________________________________________
+
+**X-Force data on the dashboard**
+
+The **Internet Threat Information Center** widget on the **Threat and Security Monitoring** dashboard.
+
+The dashboard widget uses an embedded RSS feed to display X-Force data in the dashboard widget.
+
+X-Force update server - (www.iss.net)
+
+The dashboard uses four AlertCon threat level images to provide a visual indicator of the current threat level.
+
+To view a summary of the current advisories, click the arrow icon next to the advisory. To investigate the full advisory, click the advisory link.
+
+**IBM Security Threat Content application**
+
+The **IBM Security Threat Content** application on the IBM Security App Exchange (https://exchange.xforce.ibmcloud.com/hub) contains rules, building blocks, and custom properties that are intended for use with the X-Force.
+
+Your QRadar administrator must install the **IBM Security Threat Content** application in order for the rules to appear in the **Threats** group in the **Rules List** window. The rules must be enabled before you can use them.
+
+By default, ***X-Force legacy rules are disabled.***
+
+**IP address and URL categories**
+
+The IP addresses are grouped into the following categories:
++ Malware hosts
++ Spam sources
++ Dynamic IP addresses
++ Anonymous proxies
++ Botnet Command and Control
++ Scanning IP addresses
+
+To see the complete list of categories for URL classification, see the IBM X-Force Exchange website (https://exchange.xforce.ibmcloud.com/faq).
+
+A *collection* is a repository where you store the information that is found during an investigation. You can use a collection to save X-Force Exchange reports, comments, or any other content.
+
+Procedure:
+1. To look up an IP address in X-Force Exchange from QRadar, follow these steps:
+  + Select the **Log Activity** or the **Network Activity** tab.
+  + Right-click the IP address that you want to view in X-Force Exchange and select **More Options > Plugin Options > X-Force Exchange Lookup** to open the X-Force Exchange interface.
+2. To look up a URL in X-Force Exchange from QRadar, follow these steps:
+  + Select either the **Offenses** tab, or the event details windows available on the **Offenses**.
+  + Right-click the URL you want to look up in X-Force Exchange and select **Plugin Options > X-Force Exchange Lookup** to open the X-Force Exchange interface.
+
+**Creating a URL categorization rule to monitor access to certain types of websites**
+
+**Offenses > Maintain Custom Rules** permission required.
+[189 - procedure]
+
+**Confidence factor and IP address reputation**
+
+X-Force categorizes IP address reputation data and assigns a confidence factor value 0 - 100, where 0 represents no confidence and 100 represents certainty.
+
+**Determining a threshold**
+
+A value of 50 or higher is the threshold where you might consider action on a triggered rule.
+
+**Tuning false positives with the confidence factor setting**
+
+Use the confidence factor to limit the number of offenses that are created by triggered rules. [191 - procedure 1 & 2]
+___________________________________________________
+
+You can use the **Reports** tab to create, edit, distribute, and manage reports.
+
+**Report tab permissions**
+
+Administrative users can view all reports that are created by other users.
+
+Non-administrative users can view reports that they created only or reports that are shared by other users.
+
+**Report tab parameters**
+
+If a report does not specify an interval schedule, you must manually generate the report.
+
+**Report layout**
+
+A report can consist of several data elements and can represent network and security data in various styles, such as tables, line charts, pie charts, and bar charts.
+
+**Chart types**
+
+When you create a report, you must choose a chart type for each chart you include in your report. The chart type determines how the data and network objects appear in your report.
+
+You can use any of the following types of charts:
+1. None
+1. Asset vulnerabilities
+1. Connections
+1. Device rules
+1. Device unused objects
+1. Events/logs
+1. Log sources
+1. Flows
+1. Top destination IPs
+1. Top offenses
+1. Offenses over time
+1. Top source IPs
+1. Vulnerabilities
+
+**Report tab toolbar**
+
+The following list identifies the **Reports** toolbar options:
+1. Group
+1. Manage groups
+1. Actions
+  + Create
+  + Edit
+  + Duplicate
+  + Assign groups
+  + Share
+  + Toogle scheming
+  + Run report
+  + Run report on raw data
+  + Delete report
+  + Delete generated content
+1. Hide interactive reports - Select this check box to hide inactive report templates.
+1. Search reports - Type your search criteria in the **Search Reports** field and click the **Search Reports** icon. A search is run on the following parameters to determine which match your specified criteria:
+  + Report Title
+  + Report Description
+  + Report Group
+  + Report Groups
+  + Report Author User Name
+
+**Graph types**
+
+The network configuration files determine the colors that the charts use to depict network traffic.
+
+The following list describes the chart types that are available for each type of graph:
+1. Line
+  + Events/logs
+  + Flows
+  + Connections
+  + Vulnerabilities
+1. Stacked Line
+  + Events/logs
+  + Flows
+  + Connections
+  + Vulnerabilities
+1. Bar
+  + Events/logs
+  + Flows
+  + Asset Vulnerabilities Connections
+  + Connections
+  + Vulnerabilities
+1. Horizontal Bar
+  + Top Source IPs
+  + Top Offenses
+  + Offenses Over Time
+  + Top Destination IPs
+1. Stacked Bar
+  + Events/logs
+  + Flows
+  + Connections
+1. Pie
+  + Events/Logs
+  + Flows
+  + Asset Vulnerabilities
+  + Connections
+  + Vulnerabilities
+1. Table - *To display content in a table, you must design the report with a full page width container.*
+  + Events/Logs
+  + Flows
+  + Top Source IPs
+  + Top Offenses
+  + Offenses Over Time
+  + Top Destination IPs
+  + Connections
+  + Vulnerabilities
+1. Aggregate table - *To display content in a table, you must design the report with a full page width container.*
+
+The following graph types are available for QRadar Log Manager reports:
++ Line
++ Stacked Line
++ Bar
++ Stacked Bar
++ Pie
++ Table
+
+**Creating custom reports**
+
+You must have **appropriate network permissions** to share a generated report with other users.
+
+The wizard uses the following key elements to help you create a report:
++ **Layout** - Position and size of each container
++ **Container** - Placeholder for the featured content
++ **Content** - Definition of the chart that is placed in the container
+
+When you specify the output format for the report, consider that the file size of generated reports can be one to 2 megabytes, depending on the selected output format.
+
+***Allow this report to generate manually*** - **Yes** or **No** options
+
+[199 - procedure - look]
+
+**Editing a report**
+
+When you customize a scheduled report to generate manually, select the time span **End Date** before you select the **Start Date**.
+
+**Procedure**
+1. Click the **Reports** tab.
+2. Double-click the report that you want to customize.
+3. On the Report wizard, change the parameters to customize the report to generate the content you
+require.
+
+**Results**
+
+If you reconfigure a report to enter a new report title, the report is saved as a new report with the new
+name; however, the original report remains the same.
+
+**Viewing generated reports**
+
+On the **Reports** tab, an icon is displayed in the **Formats** column if a report has generated content. You can click the icon to view the report.
+
+**About this task**
+
+When a report has generated content, the **Generated Reports** column displays a list box. The list box displays all generated content, which is organized by the time-stamp of the report. The most recent reports are displayed at the top of the list. If a report has no generated content, the **None** value is displayed in the **Generated Reports** column.
+
+Icons representing the report format of the generated report are displayed in the **Formats** column.
+
+**Note**: The XML and XLS formats are available only for reports that use a single chart table format (portrait
+or landscape).
+
+**Deleting generated content**
+
+When you delete generated content, all reports that have generated from the report template are deleted, but the report template is retained.
+
+**Manually generating a report**
+
+While a report generates, the Next Run Time column displays one of the three following messages:
++ **Generating** - The report is generating.
++ **Queued (position in the queue)** - The report is queued for generation. The message indicates the position that the report is in the queue. For example, 1 of 3.
++ **(x hour(s) x min(s) y sec(s))** - The report is scheduled to run. The message is a count-down timer that specifies when the report will run next.
+
+**Sharing a report**
+
+You can share reports with other users. When you share a report, you provide a copy of the selected report to another user to edit or schedule.
+
+**About this task**
+
+Any updates that the user makes to a shared report does not affect the original version of the report.
+
+**You must have administrative privileges to share reports.** Also, for a new user to view and access reports, **an administrative user must share all the necessary reports with the new user**.
+
+**Branding reports**
+
+Ensure that the graphic you want to use is 144 x 50 pixels with a white background.
+
+When you upload an image, the image is automatically saved as a Portable Network Graphic (PNG).
+
+When you upload a new image and set the image as your default, the new default image is not applied to reports that have been previously generated. Updating the logo on previously generated reports requires you to manually generate new content from the report.
+
+**Report groups**
+
+By default, the **Reports** tab displays the list of all reports, however, you can categorize reports into groups
+such as:
++ Compliance
++ Executive
++ Log Sources
++ Network Management
++ Security
++ VoIP
++ Other
+
+***You must have administrative access to create, edit, or delete groups***
+
+**Sharing report groups**
+
+***You must have administrative permissions to share a report group with other users.***
+
+You cannot use the Content Management Tool (CMT) to share report groups.
+
++ Any updates that the user makes to a shared report group does not affect the original version of the report. Only the owner can delete or modify.
++ A copy of the report is created when a user duplicates or runs the shared report. The user can edit or schedule reports within the copied report group.
++ The group sharing option overrides previous report sharing options that were configured for reports in the group.
+
+**Assign a report to a group**
+
+Procedure
+1. Click the **Reports** tab.
+2. Select the report that you want to assign to a group.
+3. From the **Actions** list box, select **Assign Groups**.
+4. From the **Item Groups** list, select the check box of the group you want to assign to this report.
+5. Click **Assign Groups**.
+
+**Removing a report**
+
+When you remove a report from a group, the report still exists on the **Reports** tab. The report is not removed from your system.
