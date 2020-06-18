@@ -7,3 +7,4 @@
 + [Notebook](https://onedrive.live.com/?authkey=%21AI46f%2D7%2DkCrYFQo&cid=2E7C5744ED327CCE&id=2E7C5744ED327CCE%2117365&parId=2E7C5744ED327CCE%2111655&o=OneUp)
 + [Jovanin Dump](https://www.dumpsbase.com/freedumps/ibm-security-qradar-siem-v7-2-6-associate-analyst-c2150-612-dumps.html)
 + [Aleksin Dump](https://www.dumpsbase.com/freedumps/c1000-026-ibm-qradar-siem-v7-3-2-real-dumps-2020.html)
++ [Docs](https://www.ibm.com/support/knowledgecenter/SSKMKU/com.ibm.qradar.doc/t_qradar_create_cust_rul.html)
